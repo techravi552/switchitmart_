@@ -12,8 +12,7 @@ connectDB();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://switchitmart-dez6yav93-switchit.vercel.app',  // ← आपका Vercel URL (deploy के बाद update करें)
-    /\.vercel\.app$/                 // सभी Vercel subdomains allow
+    'https://switchitmart.vercel.app',  // ← आपका Vercel URL (deploy के बाद update करें)
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
