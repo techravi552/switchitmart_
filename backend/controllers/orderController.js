@@ -146,9 +146,21 @@ const sellerAction = async (req, res) => {
     }
 
    const flowMap = {
-  pack:     { from:'seller_accepted', to:'packed',     msg:'Order has been packed and ready for dispatch.' },
-  dispatch: { from:'packed',          to:'dispatched', msg:'Order is out for delivery!' },
-  deliver:  { from:'dispatched',      to:'delivered',  msg:'Order delivered successfully!' },
+  pack: {
+    from: ['seller_accepted', 'buyer_confirmed'],
+    to: 'packed',
+    msg: 'Order has been packed and ready for dispatch.'
+  },
+  dispatch: {
+    from: 'packed',
+    to: 'dispatched',
+    msg: 'Order is out for delivery!'
+  },
+  deliver: {
+    from: 'dispatched',
+    to: 'delivered',
+    msg: 'Order delivered successfully!'
+  },
 };
 
     if (action === 'accept') {
@@ -180,7 +192,7 @@ message:`"${order.seller.shopName||order.seller.name}" accepted your order for "
     } else {
       // pack / dispatch / deliver
       const flow = flowMap[action];
-      if (order.status !== flow.from) return res.status(400).json({ message:`Cannot ${action}: order must be in "${flow.from}" status (currently: ${order.status})` });
+      if (!flow.from.includes(order.status)) return res.status(400).json({ message:`Cannot ${action}: order must be in "${flow.from}" status (currently: ${order.status})` });
       order.status = flow.to;
       addTL(order, flow.to, flow.msg, 'seller');
 
