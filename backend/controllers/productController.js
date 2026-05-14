@@ -32,7 +32,7 @@ const addProduct = async (req, res) => {
 
     const product = await Product.create({
       name, description, mrpPrice:originalMRP, price:sellingPrice,
-      image: req.file ? `/uploads/${req.file.filename}` : '',
+    image: req.file ? req.file.path : '',
       category:category||'General', seller:req.user._id,
       location:{ latitude:parseFloat(latitude), longitude:parseFloat(longitude), address:address||'' },
       stock:parseInt(stock)||1,
@@ -187,7 +187,9 @@ const updateProduct = async (req, res) => {
     if (freeDelivery!==undefined) product.freeDelivery = freeDelivery==='true'||freeDelivery===true;
     if (isActive!==undefined)     product.isActive = isActive;
     if (deliveryRadius)           product.deliveryRadius = Math.min(50,Math.max(1,parseInt(deliveryRadius)||10));
-    if (req.file) product.image = `/uploads/${req.file.filename}`;
+   if (req.file) {
+  product.image = req.file.path;
+}
     if (tags) product.tags = typeof tags==='string'?tags.split(',').map(t=>t.trim()):tags;
     if (useCustomDelivery!==undefined) {
       let slabs = deliverySlabs;
