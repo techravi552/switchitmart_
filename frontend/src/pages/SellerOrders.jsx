@@ -120,11 +120,11 @@ export default function SellerOrders() {
                     {/* Price + status */}
                     <div className="sm:text-right shrink-0">
                       <div className={`inline-flex items-center gap-1 mb-2 ${st.cls}`}>{st.icon}{st.label}</div>
-                      {/* {order.status === 'pending' && order.acceptDeadline && (
+                      {order.status === 'pending' && order.acceptDeadline && (
                         <div className="mt-1 mb-1">
                           <Countdown deadline={order.acceptDeadline} />
                         </div>
-                      )} */}
+                      )}
                       <div className="text-xs space-y-0.5 mt-1">
                         <p className="text-gray-500">Items: {formatCurrency(order.productPrice * order.quantity)}</p>
                         <p className="text-gray-500">Delivery: {order.deliveryCharge === 0 ? <span className="text-green-600">Free</span> : formatCurrency(order.deliveryCharge)}</p>

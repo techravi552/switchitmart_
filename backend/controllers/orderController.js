@@ -7,7 +7,7 @@ const { createNotification, logActivity } = require('./notificationController');
 const { formatCurrency } = require('../utils/format');
 const { sendEmail, emailTemplates } = require('../utils/email');
 
-const ACCEPT_TIMEOUT_MINUTES = 15;
+const ACCEPT_TIMEOUT_MINUTES = 1;
 
 const addTL = (order, status, message, actor='system') =>
   order.timeline.push({ status, message, actor, timestamp: new Date() });
