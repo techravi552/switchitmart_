@@ -10,8 +10,8 @@ const sCfg = {
   pending:         { label:'Pending',        cls:'status-pending',   icon:<Clock size={12}/>   },
   seller_accepted: { label:'Accepted',       cls:'status-accepted',  icon:<CheckCircle size={12}/> },
   seller_rejected: { label:'Rejected',       cls:'status-rejected',  icon:<XCircle size={12}/> },
-  buyer_confirmed: { label:'Buyer Confirmed',cls:'status-accepted',  icon:<CheckCircle size={12}/> },
-  buyer_rejected:  { label:'Buyer Rejected', cls:'status-rejected',  icon:<XCircle size={12}/> },
+  // buyer_confirmed: { label:'Confirmed',cls:'status-accepted',  icon:<CheckCircle size={12}/> },
+  // buyer_rejected:  { label:'Buyer Rejected', cls:'status-rejected',  icon:<XCircle size={12}/> },
   packed:          { label:'Packed',         cls:'bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold px-2.5 py-1 rounded-full', icon:<Box size={12}/> },
   dispatched:      { label:'Out for Delivery',cls:'bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold px-2.5 py-1 rounded-full', icon:<Send size={12}/> },
   delivered:       { label:'Delivered',      cls:'status-delivered', icon:<Truck size={12}/> },
@@ -120,11 +120,11 @@ export default function SellerOrders() {
                     {/* Price + status */}
                     <div className="sm:text-right shrink-0">
                       <div className={`inline-flex items-center gap-1 mb-2 ${st.cls}`}>{st.icon}{st.label}</div>
-                      {order.status === 'pending' && order.acceptDeadline && (
+                      {/* {order.status === 'pending' && order.acceptDeadline && (
                         <div className="mt-1 mb-1">
                           <Countdown deadline={order.acceptDeadline} />
                         </div>
-                      )}
+                      )} */}
                       <div className="text-xs space-y-0.5 mt-1">
                         <p className="text-gray-500">Items: {formatCurrency(order.productPrice * order.quantity)}</p>
                         <p className="text-gray-500">Delivery: {order.deliveryCharge === 0 ? <span className="text-green-600">Free</span> : formatCurrency(order.deliveryCharge)}</p>
@@ -173,15 +173,23 @@ export default function SellerOrders() {
                       </button>
                     </div>
                   )}
-                  {order.status === 'seller_accepted' && (
+                  {/* {order.status === 'seller_accepted' && (
                     <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1.5 py-1"><Clock size={13} />Waiting for buyer to confirm...</p>
-                  )}
-                  {order.status === 'buyer_confirmed' && (
-                    <button onClick={() => doAction(order._id, 'pack')} disabled={!!actId}
-                      className="w-full sm:w-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-sm py-2 px-5 rounded-xl flex items-center justify-center gap-2 transition-all">
-                      {isLoading('pack') ? <Loader size={13} className="animate-spin" /> : <Box size={14} />} Mark as Packed
-                    </button>
-                  )}
+                  )} */}
+                {(order.status === 'seller_accepted' || order.status === 'buyer_confirmed') && (
+  <button
+    onClick={() => doAction(order._id, 'pack')}
+    disabled={!!actId}
+    className="w-full sm:w-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-sm py-2 px-5 rounded-xl flex items-center justify-center gap-2 transition-all"
+  >
+    {isLoading('pack') ? (
+      <Loader size={13} className="animate-spin" />
+    ) : (
+      <Box size={14} />
+    )}
+    Mark as Packed
+  </button>
+)}
                   {order.status === 'packed' && (
                     <button onClick={() => doAction(order._id, 'dispatch')} disabled={!!actId}
                       className="w-full sm:w-auto bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-sm py-2 px-5 rounded-xl flex items-center justify-center gap-2 transition-all">

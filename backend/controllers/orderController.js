@@ -145,22 +145,22 @@ const sellerAction = async (req, res) => {
       if (order.status !== 'pending') return res.status(400).json({ message:`Cannot ${action}: order is ${order.status}` });
     }
 
-    const flowMap = {
-      pack:     { from:'buyer_confirmed', to:'packed',     msg:'Order has been packed and ready for dispatch.' },
-      dispatch: { from:'packed',          to:'dispatched', msg:'Order is out for delivery!' },
-      deliver:  { from:'dispatched',      to:'delivered',  msg:'Order delivered successfully!' },
-    };
+   const flowMap = {
+  pack:     { from:'seller_accepted', to:'packed',     msg:'Order has been packed and ready for dispatch.' },
+  dispatch: { from:'packed',          to:'dispatched', msg:'Order is out for delivery!' },
+  deliver:  { from:'dispatched',      to:'delivered',  msg:'Order delivered successfully!' },
+};
 
     if (action === 'accept') {
       order.status = 'seller_accepted';
-      addTL(order,'seller_accepted','Seller accepted your order. Please confirm to proceed.','seller');
+addTL(order,'seller_accepted','Seller accepted your order.','seller');
       await order.save();
       await createNotification({
         recipientId:order.buyer._id, senderId:req.user._id, type:'order_accepted',
         title:'🎉 Order Accepted!',
-        message:`"${order.seller.shopName||order.seller.name}" accepted your order for "${order.product.name}". Confirm to proceed.`,
+message:`"${order.seller.shopName||order.seller.name}" accepted your order for "${order.product.name}".`,
         data:{ orderId:order._id, productId:order.product._id, productPrice:order.productPrice, deliveryCharge:order.deliveryCharge, totalAmount:order.totalPrice, quantity:order.quantity },
-        requiresAction:true,
+        requiresAction:false,
       });
       sendEmail({ to:order.buyer.email, ...emailTemplates.orderAccepted(order.buyer.name, order.product.name, order.totalPrice) });
 

@@ -59,15 +59,15 @@ export default function NotificationBell() {
     setUnread(u => Math.max(0, u - 1));
   };
 
-  const respond = async (notifId, action) => {
-    setActing(notifId + action);
-    try {
-      const r = await api.put(`/notifications/${notifId}/respond`, { action });
-      toast.success(r.data.message);
-      fetchAll();
-    } catch (err) { toast.error(err.response?.data?.message || 'Action failed'); }
-    setActing(null);
-  };
+  // const respond = async (notifId, action) => {
+  //   setActing(notifId + action);
+  //   try {
+  //     const r = await api.put(`/notifications/${notifId}/respond`, { action });
+  //     toast.success(r.data.message);
+  //     fetchAll();
+  //   } catch (err) { toast.error(err.response?.data?.message || 'Action failed'); }
+  //   setActing(null);
+  // };
 
   return (
     <div className="relative" ref={ref}>
@@ -136,7 +136,7 @@ export default function NotificationBell() {
                       )}
 
                       {/* Buyer action buttons */}
-                      {n.requiresAction && !n.actionTaken && (
+                      {/* {n.requiresAction && !n.actionTaken && (
                         <div className="flex gap-2 mt-2">
                           <button disabled={!!acting} onClick={e => { e.stopPropagation(); respond(n._id, 'confirmed'); }}
                             className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-1.5 rounded-lg transition-all disabled:opacity-60">
@@ -147,12 +147,17 @@ export default function NotificationBell() {
                             ❌ Reject
                           </button>
                         </div>
-                      )}
-                      {n.requiresAction && n.actionTaken && (
+                      )} */}
+                      {/* {n.requiresAction && n.actionTaken && (
                         <div className={`mt-1.5 text-xs font-semibold px-2 py-0.5 rounded-full inline-block ${n.actionTaken==='confirmed'?'bg-green-50 text-green-700':'bg-red-50 text-red-600'}`}>
                           You {n.actionTaken} this order
                         </div>
-                      )}
+                      )} */}
+                      {n.type === 'order_accepted' && (
+  <div className="mt-2 text-xs text-green-600 font-semibold">
+    ✅ Seller accepted your order
+  </div>
+)}
                     </div>
                     {!n.isRead && <div className="w-2 h-2 bg-brand-500 rounded-full shrink-0 mt-2"/>}
                   </div>
