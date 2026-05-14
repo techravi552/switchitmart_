@@ -147,7 +147,7 @@ const sellerAction = async (req, res) => {
 
    const flowMap = {
   pack: {
-    from: ['seller_accepted', 'buyer_confirmed'],
+    from: ['seller_accepted'],
     to: 'packed',
     msg: 'Order has been packed and ready for dispatch.'
   },
