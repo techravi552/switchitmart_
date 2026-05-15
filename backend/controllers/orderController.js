@@ -7,7 +7,7 @@ const { createNotification, logActivity } = require('./notificationController');
 const { formatCurrency } = require('../utils/format');
 const { sendEmail, emailTemplates } = require('../utils/email');
 
-const ACCEPT_TIMEOUT_MINUTES = 1;
+const ACCEPT_TIMEOUT_MINUTES = 3;
 
 const addTL = (order, status, message, actor='system') =>
   order.timeline.push({ status, message, actor, timestamp: new Date() });
@@ -61,7 +61,7 @@ const placeOrder = async (req, res) => {
     const savings      = Math.max(0, (product.mrpPrice||product.price) - product.price) * qty;
     const totalPrice   = product.price * qty + delCharge;
 
-    // 15-min accept deadline
+    // 3-min accept deadline
     const acceptDeadline = new Date(Date.now() + ACCEPT_TIMEOUT_MINUTES * 60 * 1000);
 
     const order = await Order.create({
@@ -82,8 +82,8 @@ const placeOrder = async (req, res) => {
 
     await createNotification({
       recipientId:product.seller._id, senderId:req.user._id, type:'order_placed',
-      title:'🛒 New Order! (15 min to respond)',
-      message:`${req.user.name} ordered "${product.name}" ×${qty} — ${formatCurrency(totalPrice)}. Accept within 15 minutes!`,
+      title:'🛒 New Order! (3 min to respond)',
+      message:`${req.user.name} ordered "${product.name}" ×${qty} — ${formatCurrency(totalPrice)}. Accept within 3 minutes!`,
       data:{ orderId:order._id, productId:product._id, totalAmount:totalPrice, quantity:qty },
     });
 

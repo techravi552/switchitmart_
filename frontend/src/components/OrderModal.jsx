@@ -75,7 +75,7 @@ export default function OrderModal({ product, buyerLocation: propLocation, onClo
         }).open();
         setRzpLoading(false);
       } else {
-        toast.success('Order placed! Seller has 15 min to respond. 🕐');
+        toast.success('Order placed! Seller has 3 min to respond. 🕐');
         onSuccess?.(); onClose();
       }
     } catch (err) { toast.error(err.response?.data?.message || 'Failed to place order'); }
@@ -101,7 +101,7 @@ export default function OrderModal({ product, buyerLocation: propLocation, onClo
               <p className="font-semibold text-gray-900 dark:text-white">{product.name}</p>
               <p className="text-brand-600 font-bold">{formatCurrency(product.price)}</p>
               {product.mrpPrice > product.price && <p className="text-xs text-green-600">Save {formatCurrency(product.mrpPrice - product.price)}</p>}
-              <p className="text-xs text-gray-400">Seller responds within 15 min ⏱</p>
+              <p className="text-xs text-gray-400">Seller responds within 3 min ⏱</p>
             </div>
           </div>
 
